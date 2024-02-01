@@ -58,7 +58,7 @@ func RequireAuth(context *gin.Context) {
 		context.Next()
 	} else {
 		context.AbortWithStatus(http.StatusUnauthorized)
-		context.JSON(http.StatusUnauthorized, gin.H{"message": "Access denied, login to access"})
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid claims"})
 		return
 	}
 }
