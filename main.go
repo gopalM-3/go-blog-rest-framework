@@ -1,9 +1,10 @@
 package main
 
 import (
-
 	"github.com/gin-gonic/gin"
+	"github.com/gopalM-3/go-blog-rest-framework/controllers"
 	"github.com/gopalM-3/go-blog-rest-framework/initializers"
+	"github.com/gopalM-3/go-blog-rest-framework/middleware"
 )
 
 func init() {
@@ -14,10 +15,11 @@ func init() {
 
 func main() {
 	router := gin.Default()
-	router.GET("/ping", func(context *gin.Context) {
-		context.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+
+	router.POST("/signup", controllers.Signup)
+	router.POST("/login", controllers.Login)
+	router.GET("/verify-token", middleware.RequireAuth, controllers.Verify)
+	router.GET("/logout", controllers.Logout)
+
 	router.Run("localhost:8000")
 }
