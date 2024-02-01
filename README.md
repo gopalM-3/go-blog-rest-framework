@@ -1,2 +1,3 @@
 # go-blog-rest-framework
-A REST framework for a blog application, built in Golang
+
+My [Blogger REST API framework](https://github.com/gopalM-3/blog-rest-framework), rebuilt in Golang
