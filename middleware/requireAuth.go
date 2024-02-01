@@ -23,7 +23,7 @@ func RequireAuth(context *gin.Context) {
 		return
 	}
 
-	// verifying the extracted token
+	// parsing the extracted token
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -34,7 +34,8 @@ func RequireAuth(context *gin.Context) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	
+
+	// verifying the extracted token
 	if claims, ok := token.Claims.(jwt.MapClaims); ok {
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
 			context.AbortWithStatus(http.StatusUnauthorized)
