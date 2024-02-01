@@ -38,7 +38,7 @@ func RequireAuth(context *gin.Context) {
 	if claims, ok := token.Claims.(jwt.MapClaims); ok {
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
 			context.AbortWithStatus(http.StatusUnauthorized)
-			context.JSON(http.StatusUnauthorized, gin.H{"message": "Access denied, login to access"})
+			context.JSON(http.StatusUnauthorized, gin.H{"message": "Token expired, login again"})
 			return
 		}
 
@@ -48,7 +48,7 @@ func RequireAuth(context *gin.Context) {
 
 		if user.ID == 0 {
 			context.AbortWithStatus(http.StatusUnauthorized)
-			context.JSON(http.StatusUnauthorized, gin.H{"message": "Access denied, login to access"})
+			context.JSON(http.StatusUnauthorized, gin.H{"message": "Access denied, user not found"})
 			return
 		}
 
