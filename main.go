@@ -16,6 +16,8 @@ func init() {
 func main() {
 	router := gin.Default()
 
+	router.GET("/", controllers.Homepage)
+
 	router.POST("/signup", controllers.Signup)
 	router.POST("/login", controllers.Login)
 	router.GET("/verify-token", middleware.RequireAuth, controllers.Verify)
