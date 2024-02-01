@@ -18,10 +18,20 @@ func main() {
 
 	router.GET("/", controllers.Homepage)
 
-	router.POST("/signup", controllers.Signup)
-	router.POST("/login", controllers.Login)
+	router.POST("/user/signup", controllers.Signup)
+	router.POST("/user/login", controllers.Login)
+	router.GET("/user/logout", controllers.Logout)
 	router.GET("/verify-token", middleware.RequireAuth, controllers.Verify)
-	router.GET("/logout", controllers.Logout)
+
+	router.GET("/blogs/all", controllers.AllBlogs)
+	router.GET("/blogs/id/:id", controllers.BlogById)
+	router.GET("/blogs/slug/:slug", controllers.BlogBySlug)
+	router.GET("/blogs/category/:category", controllers.BlogByCategory)
+	router.GET("/blogs/hashtag/:hashtag", controllers.BlogByHashtag)
+	router.GET("/blogs/user", middleware.RequireAuth, controllers.BlogByUser)
+	router.POST("/blogs/post", middleware.RequireAuth, controllers.PostBlog)
+	router.PUT("/blogs/update/:id", middleware.RequireAuth, controllers.UpdateBlog)
+	router.DELETE("/blogs/delete/:id", middleware.RequireAuth, controllers.DeleteBlog)
 
 	router.Run("localhost:8000")
 }

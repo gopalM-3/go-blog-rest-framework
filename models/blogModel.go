@@ -12,5 +12,5 @@ type Blog struct {
 	Author 	 string `gorm:"foreignKey:Username"`
 	Hashtags string `gorm:"type:text"`
 	Status 	 bool
-	Upvotes  int
+	Votes  int
 }

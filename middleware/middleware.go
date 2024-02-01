@@ -19,7 +19,7 @@ func RequireAuth(context *gin.Context) {
 
 	if err != nil {
 		context.AbortWithStatus(http.StatusUnauthorized)
-		context.JSON(http.StatusUnauthorized, gin.H{"message": "Access denied, login to access"})
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "Access denied, authorization header not found"})
 		return
 	}
 
@@ -62,4 +62,36 @@ func RequireAuth(context *gin.Context) {
 		context.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid claims"})
 		return
 	}
+}
+
+func ExtractClaims(context *gin.Context) jwt.MapClaims {
+	// retrieving the cookie from the request
+	tokenString, err := context.Cookie("Authorization")
+
+	if err != nil {
+		context.AbortWithStatus(http.StatusUnauthorized)
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "Access denied, authorization header not found"})
+		return nil
+	}
+
+	// parsing the extracted token
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+	
+		return []byte(os.Getenv("HMAC_SECRET")), nil
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// extracting claims
+	if claims, ok := token.Claims.(jwt.MapClaims); ok {
+		return claims
+    } else {
+		context.AbortWithStatus(http.StatusUnauthorized)
+        context.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid claims"})
+        return nil
+    }
 }
