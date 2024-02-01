@@ -7,6 +7,6 @@ import (
 )
 
 func SyncDatabase() {
-	DB.AutoMigrate(&models.User{})
+	DB.AutoMigrate(&models.User{}, &models.Blog{})
 	fmt.Println("Database migrations made!")
 }
